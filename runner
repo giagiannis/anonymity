@@ -6,7 +6,7 @@ MAIN_CLASS="gr/ntua/cslab/central/app/MainApplication";
 SCRIPTS=10
 DATASET_PATH="data/dataset"
 
-K=2
+K=3
 QID=$(seq 1 8)
 
 
