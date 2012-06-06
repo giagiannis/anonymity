@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project name="distributed" default="jar">
+	<property name="src" location="src"/>
+	<property name="build" location="bin"/>
+	<property name="jarname" location="/home/giannis/distributed.jar"/>
+	<property name="hadoop.home" location="/home/giannis/hadoop-1.0.3"/>
+	<property name="doc.dst" location="/home/giannis/doc"/>
+	
+	<target name="init" description="creates build directory for the classes">
+		<!--	creating directory containing .class files	-->
+		<mkdir dir="${build}"/>
+	</target>
+	
+	<target name="compile" depends="init" description="build the project">
+		<!-- 	compile java code 	-->
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+			<classpath>
+				<!--	setting the correct classpath  -->
+				<fileset dir="${hadoop.home}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="clean" description="cleans the projects erasing build dir">
+		<!--	clean project by erasing class files and jars	-->
+		<delete dir="${build}"/>
+		<delete file="${jarname}"/>
+	</target>
+
+	<target name="jar" depends="compile" description="creates jar file">
+		<!--	create a jar file	-->
+		<jar basedir="${build}" destfile="${jarname}"/>
+	</target>
+	
+	<target name="javadoc">
+		<javadoc sourcepath="${src}" destdir="${doc.dst}"/>
+	</target>
+</project>
