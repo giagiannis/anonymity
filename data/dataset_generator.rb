@@ -3,14 +3,14 @@
 
 #	alter the following array, to change the ranges of the attributes
 
-my_ranges=	[	[0,1],
-				[1,100],
-				[10000,99999],
-				[10, 100],
-				[1, 5000],
-				[1, 10],
-				[1, 4],
-				[1,1000]
+my_ranges=	[	[0,1],				#1
+				[1,100],			#2
+				[10000,99999],		#3
+				[10, 100],			#4
+				[1, 5000],			#5
+				[1, 10],			#6
+				[1, 4],				#7
+				[1,1000]			#8
 			]
 
 #	default number of lines. normally, lines are given as an argument to the script
