@@ -35,6 +35,6 @@
 	</target>
 	
 	<target name="javadoc">
-		<javadoc sourcepath="${src}" destdir="${doc.dst}"/>
+		<javadoc sourcepath="${src}" destdir="${doc.dst}" classpath="${hadoop.home}"/>
 	</target>
 </project>
