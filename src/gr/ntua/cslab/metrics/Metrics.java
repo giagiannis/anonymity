@@ -1,8 +1,8 @@
-package gr.ntua.cslab.central.metrics;
+package gr.ntua.cslab.metrics;
 
 import gr.ntua.cslab.central.algorithms.Algorithm;
-import gr.ntua.cslab.central.database.ResultsArray;
-import gr.ntua.cslab.central.database.Tuple;
+import gr.ntua.cslab.data.ResultsArray;
+import gr.ntua.cslab.data.Tuple;
 
 import java.util.ArrayList;
 

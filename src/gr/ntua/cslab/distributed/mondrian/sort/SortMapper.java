@@ -1,6 +1,6 @@
 package gr.ntua.cslab.distributed.mondrian.sort;
 
-import gr.ntua.cslab.central.database.Tuple;
+import gr.ntua.cslab.data.Tuple;
 
 import java.io.IOException;
 

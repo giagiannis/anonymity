@@ -1,9 +1,9 @@
 package gr.ntua.cslab.central.algorithms;
 
-import gr.ntua.cslab.central.database.DataRead;
-import gr.ntua.cslab.central.database.ResultsArray;
-import gr.ntua.cslab.central.database.Tuple;
-import gr.ntua.cslab.central.metrics.Metrics;
+import gr.ntua.cslab.data.DataRead;
+import gr.ntua.cslab.data.ResultsArray;
+import gr.ntua.cslab.data.Tuple;
+import gr.ntua.cslab.metrics.Metrics;
 
 import java.util.ArrayList;
 

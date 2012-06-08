@@ -1,6 +1,6 @@
-package gr.ntua.cslab.central.database;
+package gr.ntua.cslab.data;
 
-import gr.ntua.cslab.central.metrics.Metrics;
+import gr.ntua.cslab.metrics.Metrics;
 
 import java.util.ArrayList;
 

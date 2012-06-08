@@ -1,4 +1,4 @@
-package gr.ntua.cslab.central.database;
+package gr.ntua.cslab.data;
 
 import java.util.ArrayList;
 

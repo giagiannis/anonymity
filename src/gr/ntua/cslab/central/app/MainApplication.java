@@ -3,9 +3,9 @@ package gr.ntua.cslab.central.app;
 import gr.ntua.cslab.central.algorithms.Algorithm;
 import gr.ntua.cslab.central.algorithms.Mondrian;
 import gr.ntua.cslab.central.algorithms.TopDown;
-import gr.ntua.cslab.central.database.DataRead;
-import gr.ntua.cslab.central.database.Tuple;
-import gr.ntua.cslab.central.metrics.Metrics;
+import gr.ntua.cslab.data.DataRead;
+import gr.ntua.cslab.data.Tuple;
+import gr.ntua.cslab.metrics.Metrics;
 
 import java.io.BufferedReader;
 import java.io.IOException;
