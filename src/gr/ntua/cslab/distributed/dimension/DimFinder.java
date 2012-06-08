@@ -1,4 +1,4 @@
-package gr.ntua.cslab.distributed.mondrian.dimension;
+package gr.ntua.cslab.distributed.dimension;
 
 import java.io.IOException;
 

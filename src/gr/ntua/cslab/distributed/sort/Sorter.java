@@ -1,4 +1,4 @@
-package gr.ntua.cslab.distributed.mondrian.sort;
+package gr.ntua.cslab.distributed.sort;
 
 import java.io.IOException;
 
