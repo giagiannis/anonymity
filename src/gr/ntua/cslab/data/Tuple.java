@@ -95,10 +95,9 @@ public class Tuple {
 
 	public String toString(){
 		String buffer = new String();
-		buffer+="(";
 		for(int i=0;i<this.data.length-1;i++)
 			buffer+=this.data[i]+", ";
-		buffer+=this.data[this.data.length-1]+")";
+		buffer+=this.data[this.data.length-1];
 		return buffer;
 	}
 }

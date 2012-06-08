@@ -13,7 +13,7 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-public class DimFinderMapper extends MapReduceBase implements Mapper<LongWritable, Text, IntWritable, Text>{
+class DimFinderMapper extends MapReduceBase implements Mapper<LongWritable, Text, IntWritable, Text>{
 
 	private OutputCollector<IntWritable,Text> writer=null;
 	private Integer[] 	qid, min, max;
@@ -32,7 +32,6 @@ public class DimFinderMapper extends MapReduceBase implements Mapper<LongWritabl
 		this.min = new Integer[this.qid.length];
 		for(int i=0;i<this.min.length;i++)
 			this.min[i]=BIG_NUMBER;
-		
 	}
 	
 	@Override
@@ -53,11 +52,10 @@ public class DimFinderMapper extends MapReduceBase implements Mapper<LongWritabl
 	}
 	
 	public void close(){
-		for(int i=0;i<this.qid.length;i++)
 			try {
-				this.writer.collect(new IntWritable(this.qid[i]), new Text(max[i].toString()+" "+min[i].toString()));
+				for(int i=0;i<this.qid.length;i++)
+					this.writer.collect(new IntWritable(i), new Text(max[i].toString()+" "+min[i].toString()));
 			} catch (IOException e) {
-				System.err.println("Exception raised at DimFinderMapper while writing to disk!");
 				e.printStackTrace();
 			}
 	}
