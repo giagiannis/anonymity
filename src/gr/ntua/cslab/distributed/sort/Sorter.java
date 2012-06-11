@@ -15,6 +15,7 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 public class Sorter {
 	
 	private String dimension="7";
+	private Integer tuplesPerFile=100;
 	public Sorter(){
 		
 	}
@@ -26,11 +27,16 @@ public class Sorter {
 	public void setDimension(String dim){
 		this.dimension=dim;
 	}
+	
+	public void setTuplesPerFile(int tuplesPerFile){
+		this.tuplesPerFile=tuplesPerFile;
+	}
 
 	public void runSort(String inputDir, String outputDir) throws IOException{
 		JobConf job = new JobConf(Sorter.class);
 		job.setJobName("tuple sorter");
 		job.set("dimension", this.dimension);
+		job.set("tuplesPerFile", this.tuplesPerFile.toString());
 		
 		job.setMapperClass(SortMapper.class);
 		job.setReducerClass(SortReducer.class);

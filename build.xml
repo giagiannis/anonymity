@@ -34,7 +34,8 @@
 		<jar basedir="${build}" destfile="${jarname}"/>
 	</target>
 	
-	<target name="javadoc">
+	<target name="javadoc" depends="compile" description="creates javadoc info for classes in project">
+		<!-- 	create  javadoc info	-->
 		<javadoc sourcepath="${src}" destdir="${doc.dst}" classpath="${hadoop.home}"/>
 	</target>
 </project>
