@@ -29,7 +29,7 @@ public class SortReducer extends MapReduceBase implements
 		this.defaultPath=FileOutputFormat.getOutputPath(conf).toString()+"/output/";
 		try {
 			fs=FileSystem.get(conf);
-			writer = fs.create(new Path(this.defaultPath+"out"+this.countFiles+".txt"));
+			writer = fs.create(new Path(this.defaultPath+"part"+this.countFiles+".txt"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,17 +45,19 @@ public class SortReducer extends MapReduceBase implements
 	public void reduce(IntWritable key, Iterator<Text> values,
 			OutputCollector<Text, Text> out, Reporter reporter) throws IOException {
 		while(values.hasNext()){
-			if(countTuples<tuplesPerFile){
+			if(countTuples<tuplesPerFile && tuplesPerFile>0){
 				this.writer.write((values.next().toString()+"\n").getBytes());
 				this.countTuples++;
 			}
-			else{
+			else if(tuplesPerFile>0){
 				this.countFiles++;
 				this.countTuples=0;
 				writer.close();
 				writer = fs.create(new Path(this.defaultPath+"out"+this.countFiles+".txt"));
 				
 			}
+			else
+				this.writer.write((values.next().toString()+"\n").getBytes());
 		}
 	}
 	
