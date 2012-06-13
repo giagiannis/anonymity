@@ -2,11 +2,11 @@ package gr.ntua.cslab.data;
 
 import java.util.ArrayList;
 
-public class ResultsArray<E> extends ArrayList<ArrayList<E>>{
+public class ResultsArray<Tuple> extends ArrayList<ArrayList<Tuple>>{
 
 	private static final long serialVersionUID = 4107783859314391049L;
 
-	@Override
+	/*@Override
 	public String toString(){
 		String buffer= new String();
 		int i;
@@ -14,6 +14,17 @@ public class ResultsArray<E> extends ArrayList<ArrayList<E>>{
 			buffer+=get(i)+"\n";
 		}
 		buffer+=get(i);
+		return buffer;
+	}*/
+	@Override
+	public String toString(){
+		String buffer=new String();
+		for(int i=0;i<size();i++){
+			buffer+="[";
+			for(Tuple tup:get(i))
+				buffer+="("+tup.toString()+")";
+			buffer+="]\n";
+		}
 		return buffer;
 	}
 }

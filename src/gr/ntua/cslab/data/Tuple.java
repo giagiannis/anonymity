@@ -100,4 +100,11 @@ public class Tuple {
 		buffer+=this.data[this.data.length-1];
 		return buffer;
 	}
+	public String toStringPretty(){
+		String buffer = new String("(");
+		for(int i=0;i<this.data.length-1;i++)
+			buffer+=this.data[i]+", ";
+		buffer+=this.data[this.data.length-1]+")";
+		return buffer;
+	}
 }
