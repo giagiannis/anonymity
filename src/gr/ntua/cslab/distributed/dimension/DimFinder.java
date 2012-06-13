@@ -1,8 +1,9 @@
 package gr.ntua.cslab.distributed.dimension;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
-import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -17,6 +18,7 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 public class DimFinder {
 	private String qid;
 	private JobConf job;
+	private String orderedDim = new String(), cardinallity=new String();
 	public void runDimFinder(String inputDir, String outputDir) throws IOException{
 		job = new JobConf(DimFinder.class);
 		job.setJobName("dimension finder");
@@ -38,25 +40,33 @@ public class DimFinder {
 		FileOutputFormat.setOutputPath(job, new Path(outputDir));
 		
 		JobClient.runJob(job);
+		
+		String fileName=FileOutputFormat.getOutputPath(this.job).toString();
+		Path results = new Path(fileName+"/part-00000");
+		try {
+			BufferedReader in= new BufferedReader(new InputStreamReader(FileSystem.get(this.job).open(results)));
+			while(in.ready()){
+				String temp[]=in.readLine().split("\t");
+				System.out.println(temp[0]+","+temp[1]);
+				this.orderedDim+= temp[0]+" ";
+				this.cardinallity+= temp[1]+" ";
+			}
+			in.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setQid(String qid){
 		this.qid=qid;
 	}
 	
-	public int getDimension(){
-		Path results = new Path(FileOutputFormat.getOutputPath(this.job).toString()+"/part-00000");
-		try {
-			FileSystem fs = FileSystem.get(this.job);
-			FSDataInputStream in=fs.open(results);
-			@SuppressWarnings("deprecation")
-			String buffer=in.readLine();
-			in.close();
-			return new Integer(buffer.split("\t")[0]);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return 0;
+	public String getOrderedQid(){
+		return this.orderedDim;
+	}
+	public String getCardinallity(){
+		return this.cardinallity;
 	}
 	
 	public void clean(){
@@ -67,14 +77,5 @@ public class DimFinder {
 			e.printStackTrace();
 		}
 		
-	}
-	public static void main(String[] args) throws IOException{
-		if(args.length<2){
-			System.err.println("I need input and output directories");
-			return;
-		}
-		DimFinder a = new DimFinder();
-		a.setQid("2 5 7");
-		a.runDimFinder(args[0],args[1]);
 	}
 }

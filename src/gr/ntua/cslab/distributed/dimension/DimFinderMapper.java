@@ -52,12 +52,12 @@ class DimFinderMapper extends MapReduceBase implements Mapper<LongWritable, Text
 	}
 	
 	public void close(){
-			try {
-				for(int i=0;i<this.qid.length;i++)
-					this.writer.collect(new IntWritable(i), new Text(max[i].toString()+" "+min[i].toString()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			for(int i=0;i<this.qid.length;i++)
+				this.writer.collect(new IntWritable(this.max[i]-this.min[i]+1), new Text(new Integer(i).toString()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
