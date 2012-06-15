@@ -47,7 +47,6 @@ public class DimFinder {
 			BufferedReader in= new BufferedReader(new InputStreamReader(FileSystem.get(this.job).open(results)));
 			while(in.ready()){
 				String temp[]=in.readLine().split("\t");
-				System.out.println(temp[0]+","+temp[1]);
 				this.orderedDim+= temp[0]+" ";
 				this.cardinallity+= temp[1]+" ";
 			}

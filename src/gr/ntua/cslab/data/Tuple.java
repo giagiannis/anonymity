@@ -6,10 +6,13 @@ import java.util.ArrayList;
 
 //Using manhattan distance for norms!
 public class Tuple {
-	private String[] data;
-	private int[] intData;
-	private int[] qid;
-	private double[] divisors;
+	protected String[] data;
+	protected int[] intData,qid;
+	protected double[] divisors;
+	
+	public Tuple(){
+		
+	}
 	
 	public Tuple(String[] data){
 		initializeDataTable(data);

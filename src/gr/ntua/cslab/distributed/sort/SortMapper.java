@@ -1,10 +1,8 @@
 package gr.ntua.cslab.distributed.sort;
 
-import gr.ntua.cslab.data.Tuple;
+import gr.ntua.cslab.data.TupleWritable;
 
 import java.io.IOException;
-
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.JobConf;
@@ -14,21 +12,22 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
 public class SortMapper extends MapReduceBase implements
-		Mapper<LongWritable, Text, IntWritable, Text> {
+		Mapper<LongWritable, Text, TupleWritable, Text> {
 	
-	private int dimension;
+	private int[] qid;
 	
 	public void configure(JobConf conf){
-		this.dimension = new Integer(conf.get("dimension"));
+		String[] qid = conf.get("qid").split(" ");
+		this.qid = new int[qid.length];
+		for(int i=0;i<this.qid.length;i++)
+			this.qid[i] = new Integer(qid[i]);
 	}
 
 	@Override
 	public void map(LongWritable key, Text value,
-			OutputCollector<IntWritable, Text> out, Reporter reporter)
+			OutputCollector<TupleWritable, Text> out, Reporter reporter)
 			throws IOException {
-		Tuple temp = new Tuple(value.toString().split(","));
-		out.collect(new IntWritable(temp.getValue(this.dimension)), new Text(temp.toString()));
-		
+		out.collect(new TupleWritable(value.toString().split(","), this.qid), new Text());
 	}
 	
 	public void close(){
