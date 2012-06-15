@@ -39,7 +39,7 @@ public class SorterBasedOnSampling {
 
 	public void runSort(String inputDir, String outputDir) throws IOException{
 		JobConf job = new JobConf(SorterBasedOnSampling.class);
-		job.setJobName("tuple sorter");
+		job.setJobName("tuple sorter (based on samples)");
 		job.set("qid", this.qid);
 		job.set("numberOfCuts", new Integer(this.cuts.length).toString());
 		for(int i=0;i<this.cuts.length;i++)

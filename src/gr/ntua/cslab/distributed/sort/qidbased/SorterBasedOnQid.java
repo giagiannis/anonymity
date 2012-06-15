@@ -43,7 +43,7 @@ public class SorterBasedOnQid {
 
 	public void runSort(String inputDir, String outputDir) throws IOException{
 		JobConf job = new JobConf(SorterBasedOnQid.class);
-		job.setJobName("tuple sorter");
+		job.setJobName("tuple sorter (based an qid)");
 		job.set("qid", this.qid);
 		job.set("cardinallity", this.cardinality);
 		job.set("noOfQidDig",this.qidNumbersForFile.toString());
