@@ -24,7 +24,7 @@ public class SamplerReducer extends MapReduceBase implements
 		this.qid= new int[qid.length];
 		for(int i=0;i<this.qid.length;i++)
 			this.qid[i]=new Integer(qid[i]);
-		this.numberOfCutsWanted = new Integer(conf.get("numberOfParts"))-1;
+		this.numberOfCutsWanted = new Integer(conf.get("numberOfParts"));
 	}
 	
 	@Override
@@ -44,12 +44,11 @@ public class SamplerReducer extends MapReduceBase implements
 		}
 		else{
 			this.numberOfTuplesRead+=1;
-			if(this.numberOfTuplesRead==this.cutPerTuples && values.hasNext()){
+			if(this.numberOfTuplesRead==this.cutPerTuples){
 				this.numberOfTuplesRead=0;
 				out.collect(new Text(key.toString()), new Text());
 			}
 		}
-		
 	}
 	
 	public void close(){
