@@ -18,7 +18,7 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 public class SorterBasedOnQid {
 	
 	private String qid,cardinality;
-	private Integer qidNumbersForFile=100;
+	private Integer qidNumbersForFile=2;
 	
 	public SorterBasedOnQid(){
 		
@@ -43,7 +43,7 @@ public class SorterBasedOnQid {
 
 	public void runSort(String inputDir, String outputDir) throws IOException{
 		JobConf job = new JobConf(SorterBasedOnQid.class);
-		job.setJobName("tuple sorter (based an qid)");
+		job.setJobName("tuple sorter (based on qid)");
 		job.set("qid", this.qid);
 		job.set("cardinallity", this.cardinality);
 		job.set("noOfQidDig",this.qidNumbersForFile.toString());
