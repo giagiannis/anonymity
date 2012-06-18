@@ -12,7 +12,7 @@ public class Metrics {
 	private double[] weights=null;
 	private ArrayList<Tuple> tuples=null;
 	private ResultsArray<Tuple> results=null;
-	private int divisor[];
+	private double divisor[];
 	
 	// Constructors, getters and setters
 	
@@ -33,6 +33,11 @@ public class Metrics {
 		setQid(qid);
 	}
 	
+	public Metrics(int[] qid, double[] divisors){
+		setDivisors(divisors);
+		setQid(qid);
+	}
+	
 	public void setQid(int qid[]){
 		this.qid=qid;
 		
@@ -45,12 +50,16 @@ public class Metrics {
 		
 		if(this.tuples==null)
 			return;
-		this.divisor=new int[this.qid.length];
+		this.divisor=new double[this.qid.length];
 		for(int i=0;i<this.divisor.length;i++){
 			divisor[i]=findMax(this.tuples, this.qid[i])-findMin(this.tuples, this.qid[i]);
 		}
 	}
-	
+
+	public void setDivisors(double[] divisors){
+		this.divisor = divisors;
+	}
+
 	public void setWeights(double weights[]){
 		this.weights=weights;
 	}

@@ -13,14 +13,14 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 
 public class AnonymizeJob {
 	private JobConf job;
-	private String qid;
-	private String k;
+	private String qid,k,cardinality;
 	
 	public void runAnonymization(String inputFolder, String outputFolder) throws IOException{
 		job = new JobConf(AnonymizeJob.class);
 		job.setJobName("anonymization job");
 		job.set("qid", this.qid);
 		job.set("k",this.k);
+		job.set("cardinality", this.cardinality);
 		
 		job.setMapperClass(AnonymizeMapper.class);
 		job.setReducerClass(AnonymizeReducer.class);
@@ -46,5 +46,8 @@ public class AnonymizeJob {
 	
 	public void setK(String k){
 		this.k=k;
+	}
+	public void setCardinality(String ranges){
+		this.cardinality=ranges;
 	}
 }
