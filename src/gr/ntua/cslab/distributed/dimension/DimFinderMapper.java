@@ -16,14 +16,15 @@ import org.apache.hadoop.mapred.Reporter;
 class DimFinderMapper extends MapReduceBase implements Mapper<LongWritable, Text, IntWritable, Text>{
 
 	private OutputCollector<IntWritable,Text> writer=null;
-	private Integer[] 	qid, min, max;
+	private int[] 	qid;
+	private Integer[] min, max;
 	
 	private static int 	BIG_NUMBER=1000000,
 						SMALL_NUMBER=0;
 	
 	public void configure(JobConf conf){
 		String[] temp=conf.get("qid").split(" ");
-		this.qid=new Integer[temp.length];
+		this.qid=new int[temp.length];
 		for(int i=0;i<this.qid.length;i++)
 			this.qid[i]=new Integer(temp[i]);
 		this.max = new Integer[this.qid.length];
@@ -40,7 +41,7 @@ class DimFinderMapper extends MapReduceBase implements Mapper<LongWritable, Text
 			throws IOException {
 		if(this.writer==null)
 			this.writer=out;
-		Tuple current = new Tuple(value.toString().split(","));
+		Tuple current = new Tuple(value.toString().split(","), this.qid);
 		
 		for(int i=0;i<this.qid.length;i++){
 			if(current.getValue(this.qid[i])<this.min[i])
@@ -54,7 +55,7 @@ class DimFinderMapper extends MapReduceBase implements Mapper<LongWritable, Text
 	public void close(){
 		try {
 			for(int i=0;i<this.qid.length;i++)
-				this.writer.collect(new IntWritable(this.max[i]-this.min[i]+1), new Text(new Integer(i).toString()));
+				this.writer.collect(new IntWritable(this.qid[i]),new Text(max[i].toString()+","+min[i].toString()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

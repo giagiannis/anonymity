@@ -1,7 +1,6 @@
 package gr.ntua.cslab.distributed.dimension;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.hadoop.io.IntWritable;
@@ -18,41 +17,56 @@ class DimFinderReducer extends MapReduceBase implements Reducer<IntWritable, Tex
 	private OutputCollector<Text, Text> writer=null;
 	private Integer [] qid, ranges;
 
-	private ArrayList<Integer> orderedQid = new ArrayList<Integer>();
-
+	private int counter=0;
+	
 	public void configure(JobConf conf){
-		String[] temp=conf.get("qid").split(" ");
-		this.qid=new Integer[temp.length];
-		this.ranges = new Integer[this.qid.length];
-		for(int i=0;i<this.qid.length;i++){
-			this.qid[i]=new Integer(temp[i]);
-			this.ranges[i]=0;
-		}
+		qid = new Integer[conf.get("qid").split(" ").length];
+		ranges = new Integer[this.qid.length];
 		
 	}
 	public void reduce(IntWritable key, Iterator<Text> values,
 			OutputCollector<Text, Text> out, Reporter reporter) throws IOException {
 		if(this.writer==null)
 			this.writer=out;
-		Integer index;
+		Integer max=null,min=null;
 		while(values.hasNext()){
-			index=new Integer(values.next().toString());
-			if(this.orderedQid.lastIndexOf(index)!=-1)
-				this.orderedQid.remove(this.orderedQid.lastIndexOf(index));
-			this.orderedQid.add(index);
-			if(this.ranges[index]<key.get())
-				this.ranges[index]=key.get();
+			String[] splits=values.next().toString().split(",");
+			Integer posmax=new Integer(splits[0]),posmin=new Integer(splits[1]);
+			if(max==null || posmax>max)
+				max=posmax;
+			if(min==null || posmin<min)
+				min=posmin;
 		}
+		this.qid[this.counter]=key.get();
+		this.ranges[this.counter]=max-min+1;
+		this.counter++;
 	}
 	
 	public void close(){
-			try {
-				for(int i:this.orderedQid)
-					this.writer.collect(new Text(this.qid[i].toString()), new Text(this.ranges[i].toString()));
-			} catch (IOException e) {
-				e.printStackTrace();
+		Integer temp;
+		boolean swapped=true;
+		while(swapped){
+			swapped=false;
+			for(int i=1;i<this.ranges.length;i++){
+				if(this.ranges[i]<this.ranges[i-1]){
+					swapped=true;
+					temp=this.ranges[i];
+					this.ranges[i]=this.ranges[i-1];
+					this.ranges[i-1]=temp;
+					temp=this.qid[i];
+					this.qid[i]=this.qid[i-1];
+					this.qid[i-1]=temp;
+				}
 			}
+		}
+		try {
+			for(int i=0;i<this.qid.length;i++)
+				this.writer.collect(new Text(this.qid[i].toString()), new Text(this.ranges[i].toString()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+	
 	
 
 }
