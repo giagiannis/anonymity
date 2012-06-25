@@ -48,8 +48,6 @@ public class Tuple {
 	public int getValue(int column){
 		if(this.intData[column-1]==-1)
 			this.intData[column-1]=new Integer(this.data[column-1]);
-		//System.err.println("I am trying to get "+column +" containing the value:"+this.data[column-1]);
-	//	System.exit(0);
 		return this.intData[column-1];
 	}
 	
@@ -110,6 +108,16 @@ public class Tuple {
 		for(int i=0;i<this.data.length-1;i++)
 			buffer+=this.data[i]+", ";
 		buffer+=this.data[this.data.length-1]+")";
+		return buffer;
+	}
+	public String toStringDebug(){
+		String buffer = new String("Qid:\t");
+		for(int i:qid)buffer+=i+"\t";
+		buffer+="\ndata:\t";
+		for(String s:data)buffer+=s+"\t";
+		buffer+="\nintData:\t";
+		for(int i:intData)buffer+=i+"\t";
+		buffer+="\n";
 		return buffer;
 	}
 }

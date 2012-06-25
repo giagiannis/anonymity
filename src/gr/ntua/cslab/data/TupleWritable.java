@@ -26,13 +26,14 @@ public class TupleWritable extends Tuple implements WritableComparable<Tuple> {
 	public void readFields(DataInput in) throws IOException {
 		this.data = new String[in.readInt()];
 		for(int i=0;i<this.data.length;i++)
-			this.data[i] = in.readUTF();
+			this.data[i] = new String(in.readUTF());
 		this.qid = new int[in.readInt()];
 		for(int i=0;i<this.qid.length;i++)
 			this.qid[i]=in.readInt();
 		this.intData = new int[in.readInt()];
 		for(int i=0;i<this.intData.length;i++)
 			this.intData[i]=in.readInt();
+
 	}
 
 	@Override
