@@ -43,10 +43,13 @@ public class SamplerReducer extends MapReduceBase implements
 			this.cutPerTuples = this.tuplesReadFromMappers/this.numberOfCutsWanted;
 		}
 		else{
-			this.numberOfTuplesRead+=1;
-			if(this.numberOfTuplesRead==this.cutPerTuples){
-				this.numberOfTuplesRead=0;
-				out.collect(new Text(key.toString()), new Text());
+			while(values.hasNext()){
+				values.next();
+				this.numberOfTuplesRead+=1;
+				if(this.numberOfTuplesRead==this.cutPerTuples){
+					this.numberOfTuplesRead=0;
+					out.collect(new Text(key.toString()), new Text());
+				}
 			}
 		}
 	}
