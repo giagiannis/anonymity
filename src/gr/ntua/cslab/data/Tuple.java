@@ -48,6 +48,8 @@ public class Tuple {
 	public int getValue(int column){
 		if(this.intData[column-1]==-1)
 			this.intData[column-1]=new Integer(this.data[column-1]);
+		//System.err.println("I am trying to get "+column +" containing the value:"+this.data[column-1]);
+	//	System.exit(0);
 		return this.intData[column-1];
 	}
 	
