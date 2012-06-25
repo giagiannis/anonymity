@@ -20,19 +20,21 @@ public class SortPartitionerBySamples implements
 			this.qid[i]=new Integer(temp[i]);
 		this.cuts = new TupleWritable[new Integer(conf.get("numberOfCuts"))];
 		for(int i=0;i<this.cuts.length;i++){
-			cuts[i] = new TupleWritable(conf.get("cut"+i).split(","),qid);
+			cuts[i] = new TupleWritable(conf.get("cut"+i).split(","),this.qid);
 		}
 		
 	}
 
 	@Override
 	public int getPartition(TupleWritable key, Text value, int numOfPartitions) {
-		int i=0;
-		for(i=0;i<this.cuts.length;i++){
-			if(key.compareTo(this.cuts[i])==-1)
-				return i;
+		int counter=0;
+		for(TupleWritable cut:this.cuts){
+			if(key.compareTo(cut)==1)
+				return counter;
+			else
+				counter++;
 		}
-		return i;
+		return counter;
 	}
 
 }
