@@ -19,6 +19,7 @@ public class SamplerMapper extends MapReduceBase implements
 
 	private Integer percent,counter=0;
 	private int qid[];
+	private int dataLength=0;
 	private OutputCollector<TupleWritable,IntWritable> out=null;
 	
 	public void configure(JobConf conf){
@@ -36,14 +37,15 @@ public class SamplerMapper extends MapReduceBase implements
 		if(this.out==null)
 			this.out=out;
 		Random random = new Random();
-		if(random.nextInt(100)<=this.percent){
+		if(random.nextInt(100)<this.percent){
+			if(dataLength==0)dataLength=value.toString().split(",").length;
 			this.counter++;
 			out.collect(new TupleWritable(value.toString().split(","), this.qid), new IntWritable(counter));
 		}
 	}
 	
 	public void close(){
-		String[] data= new String[this.qid.length];
+		String[] data= new String[this.dataLength];
 		for(int i=0;i<data.length;i++)			//creating the data of a tuple with coordinates {0,0,0,...}
 			data[i]="0";
 		try {
