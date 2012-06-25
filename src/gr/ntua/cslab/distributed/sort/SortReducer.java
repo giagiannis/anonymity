@@ -20,7 +20,10 @@ public class SortReducer extends MapReduceBase implements
 
 	public void reduce(TupleWritable key, Iterator<Text> values,
 			OutputCollector<Text, Text> out, Reporter reporter) throws IOException {
-		out.collect(new Text(key.toString()), new Text());
+		while(values.hasNext()){
+			values.next();
+			out.collect(new Text(key.toString()), new Text());
+		}
 	}
 	
 	public void close(){
