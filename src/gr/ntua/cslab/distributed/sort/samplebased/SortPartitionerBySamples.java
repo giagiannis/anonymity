@@ -29,7 +29,7 @@ public class SortPartitionerBySamples implements
 	public int getPartition(TupleWritable key, Text value, int numOfPartitions) {
 		int counter=0;
 		for(TupleWritable cut:this.cuts){
-			if(key.compareTo(cut)==1)
+			if(key.compareTo(cut)==-1)
 				return counter;
 			else
 				counter++;
