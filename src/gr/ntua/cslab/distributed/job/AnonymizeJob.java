@@ -14,6 +14,7 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 public class AnonymizeJob {
 	private JobConf job;
 	private String qid,k,cardinality;
+	private boolean runMondrian;
 	
 	public void runAnonymization(String inputFolder, String outputFolder) throws IOException{
 		job = new JobConf(AnonymizeJob.class);
@@ -21,6 +22,10 @@ public class AnonymizeJob {
 		job.set("qid", this.qid);
 		job.set("k",this.k);
 		job.set("cardinality", this.cardinality);
+		if(this.runMondrian)
+			job.set("runMondrian", "true");
+		else
+			job.set("runMondrian","false");
 		
 		job.setMapperClass(AnonymizeMapper.class);
 		job.setReducerClass(AnonymizeReducer.class);
@@ -49,5 +54,12 @@ public class AnonymizeJob {
 	}
 	public void setCardinality(String ranges){
 		this.cardinality=ranges;
+	}
+	
+	public void setMondrian(){
+		this.runMondrian=true;
+	}
+	public void setTopDown(){
+		this.runMondrian=false;
 	}
 }

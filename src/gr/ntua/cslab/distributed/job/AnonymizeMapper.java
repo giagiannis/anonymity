@@ -31,6 +31,7 @@ class AnonymizeMapper extends MapReduceBase implements Mapper<LongWritable, Text
 	private double[] cardinality;
 	private FSDataOutputStream mondrian, topDown;
 	private OutputCollector<Text, Text> out=null;
+	private boolean runMondrian;
 	
 	public void configure(JobConf conf){
 		String[] taskid=conf.get("mapred.task.id").split("_");
@@ -44,9 +45,16 @@ class AnonymizeMapper extends MapReduceBase implements Mapper<LongWritable, Text
 		for(int i=0;i<this.cardinality.length;i++)
 			this.cardinality[i] = new Double(cardinal[i]);
 		
+		if(conf.get("runMondrian").equals("true"))
+			this.runMondrian=true;
+		else
+			this.runMondrian=false;
+		
 		try {
-			this.mondrian = FileSystem.get(conf).create(new Path(FileOutputFormat.getOutputPath(conf)+"/mondrian/mondrian"+taskid[4]+".txt"));
-			this.topDown = FileSystem.get(conf).create(new Path(FileOutputFormat.getOutputPath(conf)+"/topDown/topDown"+taskid[4]+".txt"));
+			if(this.runMondrian)
+				this.mondrian = FileSystem.get(conf).create(new Path(FileOutputFormat.getOutputPath(conf)+"/mondrian/mondrian"+taskid[4]+".txt"));
+			else
+				this.topDown = FileSystem.get(conf).create(new Path(FileOutputFormat.getOutputPath(conf)+"/topDown/topDown"+taskid[4]+".txt"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -63,35 +71,36 @@ class AnonymizeMapper extends MapReduceBase implements Mapper<LongWritable, Text
 	
 	public void close(){
 		Metrics metrics = new Metrics(qid, cardinality);
-		this.algorithm = new Mondrian(this.data);
-		this.algorithm.setK(this.k);
-		this.algorithm.run();
-		try {
-			this.mondrian.write((this.algorithm.getResults().toString()+"\n").getBytes());
-			this.mondrian.close();
-			for(ArrayList<Tuple> set:this.algorithm.getResults()){
-				Integer size=set.size();
-				Double x = metrics.getNCP(set)*size;
-				out.collect(new Text("Mondrian"),new Text(size.toString()+" "+x.toString()));
+		if(this.runMondrian){
+			this.algorithm = new Mondrian(this.data);
+			this.algorithm.setK(this.k);
+			this.algorithm.run();
+			try {
+				this.mondrian.write((this.algorithm.getResults().toString()+"\n").getBytes());
+				this.mondrian.close();
+				for(ArrayList<Tuple> set:this.algorithm.getResults()){
+					Integer size=set.size();
+					Double x = metrics.getNCP(set)*size;
+					out.collect(new Text("Mondrian"),new Text(size.toString()+" "+x.toString()));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		this.algorithm = new TopDown(this.data);
-		this.algorithm.setK(this.k);
-		this.algorithm.run();
-		try {
-			this.topDown.write((this.algorithm.getResults().toString()+"\n").getBytes());
-			this.topDown.close();
-			for(ArrayList<Tuple> set:this.algorithm.getResults()){
-				Integer size=set.size();
-				Double x = metrics.getNCP(set)*size;
-				out.collect(new Text("TopDown"),new Text(size.toString()+" "+x.toString()));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
+		}else{
+			this.algorithm = new TopDown(this.data);
+			this.algorithm.setK(this.k);
+			this.algorithm.run();
+			try {
+				this.topDown.write((this.algorithm.getResults().toString()+"\n").getBytes());
+				this.topDown.close();
+				for(ArrayList<Tuple> set:this.algorithm.getResults()){
+					Integer size=set.size();
+					Double x = metrics.getNCP(set)*size;
+					out.collect(new Text("TopDown"),new Text(size.toString()+" "+x.toString()));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}		
+	}
 	}
 }
