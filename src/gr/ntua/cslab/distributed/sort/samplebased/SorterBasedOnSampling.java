@@ -6,6 +6,7 @@ import gr.ntua.cslab.distributed.sort.SortReducer;
 
 import java.io.IOException;
 
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.FileInputFormat;
@@ -19,6 +20,7 @@ public class SorterBasedOnSampling {
 	
 	private String qid;
 	private TupleWritable[] cuts;
+	private JobConf job;
 	
 	public SorterBasedOnSampling(){
 		
@@ -38,7 +40,7 @@ public class SorterBasedOnSampling {
 	
 
 	public void runSort(String inputDir, String outputDir) throws IOException{
-		JobConf job = new JobConf(SorterBasedOnSampling.class);
+		this.job = new JobConf(SorterBasedOnSampling.class);
 		job.setJobName("tuple sorter (based on samples)");
 		job.set("qid", this.qid);
 		job.set("numberOfCuts", new Integer(this.cuts.length).toString());
@@ -65,5 +67,13 @@ public class SorterBasedOnSampling {
 		job.setPartitionerClass(SortPartitionerBySamples.class);
 				
 		JobClient.runJob(job);
+	}
+	public void clean(){
+		try {
+			FileSystem fs = FileSystem.get(this.job);
+			fs.delete(FileOutputFormat.getOutputPath(this.job),true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
